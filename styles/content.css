@@ -1,0 +1,134 @@
+/* ── ShieldBrowse — Cosmetic Ad Hiding Stylesheet ────────────────────────── */
+
+/* Google AdSense */
+ins.adsbygoogle,
+ins.adsbygoogle[data-ad-status],
+[id^="google_ads_"],
+[id*="google_ads_"],
+#google_ads_frame,
+.adsbygoogle {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  visibility: hidden !important;
+}
+
+/* YouTube specific */
+.video-ads,
+.ytp-ad-module,
+.ytp-ad-overlay-container,
+.ytp-ad-overlay-slot,
+.ytp-ad-text-overlay,
+.ytp-ad-image-overlay,
+.ytp-ad-skip-button-container,
+.ytp-ad-player-overlay,
+.ytp-ad-player-overlay-instream-info,
+.ytp-ad-action-interstitial,
+.ytp-ad-badge,
+.ytp-ad-progress-list,
+#masthead-ad,
+ytd-masthead-ad-renderer,
+ytd-promoted-sparkles-web-renderer,
+ytd-promoted-video-renderer,
+ytd-display-ad-renderer,
+ytd-ad-slot-renderer,
+ytd-in-feed-ad-layout-renderer,
+ytd-banner-promo-renderer,
+ytd-statement-banner-renderer,
+ytd-companion-slot-renderer,
+ytd-search-pyv-renderer,
+#player-ads,
+ytd-mealbar-promo-renderer,
+ytd-primetime-promo-renderer,
+ytd-movie-offer-module-renderer {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Taboola */
+[id*="taboola"],
+[class*="taboola"],
+.trc_related_container,
+.trc_rbox,
+.trc_rbox_outer {
+  display: none !important;
+}
+
+/* Outbrain */
+[id*="outbrain"],
+[class*="outbrain"],
+.ob-widget,
+.ob-widget-section {
+  display: none !important;
+}
+
+/* Generic ad containers */
+[class*="ad-container"],
+[class*="ad-wrapper"],
+[class*="ad-banner"],
+[class*="ad-slot"],
+[class*="ad-leaderboard"],
+[class*="ad-sidebar"],
+[class*="ad-footer"],
+[class*="ad-inline"],
+[class*="ad-interstitial"],
+[class*="ad-placement"],
+[class*="ad-zone"],
+[class*="ad-block"] {
+  display: none !important;
+}
+
+/* Sponsored content */
+[class*="sponsored-content"],
+[class*="sponsored-post"],
+[class*="promoted-content"],
+[class*="promoted-post"] {
+  display: none !important;
+}
+
+/* Ad iframes */
+iframe[src*="doubleclick"],
+iframe[src*="googlesyndication"],
+iframe[src*="googleadservices"],
+iframe[src*="amazon-adsystem"],
+iframe[src*="adnxs.com"],
+iframe[src*="2mdn.net"],
+iframe[id*="google_ads"],
+iframe[name*="google_ads"] {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+/* Popup ads / overlays */
+[class*="popup-ad"],
+[class*="modal-ad"],
+[class*="interstitial-ad"],
+[class*="stickyad"],
+[class*="sticky-ad"] {
+  display: none !important;
+}
+
+/* DFP */
+.dfp-ad,
+[data-dfp-ad],
+[data-ad-unit],
+[data-native-ad] {
+  display: none !important;
+}
+
+/* Anti-adblock notices (hide them) */
+[class*="anti-adblock"],
+[class*="adblock-detect"],
+[class*="adblock-notice"],
+[id*="anti-adblock"],
+[id*="adblock-detect"],
+[id*="adblock-notice"],
+[class*="ab-message"],
+[id*="ab-message"] {
+  display: none !important;
+}

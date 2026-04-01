@@ -1,0 +1,41 @@
+{
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_0",
+        "enabled": true,
+        "path": "rules/ruleset_0.json"
+      },
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules/ruleset_1.json"
+      },
+      {
+        "id": "ruleset_2",
+        "enabled": true,
+        "path": "rules/ruleset_2.json"
+      },
+      {
+        "id": "ruleset_3",
+        "enabled": true,
+        "path": "rules/ruleset_3.json"
+      },
+      {
+        "id": "ruleset_4",
+        "enabled": true,
+        "path": "rules/ruleset_4.json"
+      },
+      {
+        "id": "ruleset_5",
+        "enabled": true,
+        "path": "rules/ruleset_5.json"
+      },
+      {
+        "id": "ruleset_6",
+        "enabled": true,
+        "path": "rules/ruleset_6.json"
+      }
+    ]
+  }
+}

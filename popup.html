@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShieldBrowse</title>
+  <style>
+    /* ── Reset & Base ───────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0f1117;
+      --bg-secondary: #1a1d27;
+      --bg-tertiary: #242836;
+      --bg-hover: #2d3245;
+      --accent: #10b981;
+      --accent-dim: #059669;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-dim: #dc2626;
+      --warning: #f59e0b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #2d3245;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --transition: 200ms ease;
+    }
+
+    body {
+      width: 380px;
+      min-height: 500px;
+      max-height: 600px;
+      overflow-y: auto;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    body::-webkit-scrollbar { width: 4px; }
+    body::-webkit-scrollbar-track { background: transparent; }
+    body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .header {
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent) 0%, #34d399 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .logo-text h1 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+    }
+
+    .logo-text span {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      animation: pulse-dot 2s infinite;
+    }
+
+    .status-dot.inactive {
+      background: var(--text-muted);
+      box-shadow: none;
+      animation: none;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ── Stats Bar ──────────────────────────────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 8px 4px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 2px;
+    }
+
+    /* ── Tabs ───────────────────────────────────────────────────────────── */
+    .tabs {
+      display: flex;
+      padding: 8px 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 8px 0;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all var(--transition);
+      user-select: none;
+    }
+
+    .tab:hover { color: var(--text-secondary); }
+    .tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── Tab Content ────────────────────────────────────────────────────── */
+    .tab-content { display: none; padding: 14px 18px; }
+    .tab-content.active { display: block; }
+
+    /* ── Section ────────────────────────────────────────────────────────── */
+    .section {
+      margin-bottom: 14px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+
+    /* ── Toggle Switch ──────────────────────────────────────────────────── */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      margin-bottom: 6px;
+      border: 1px solid var(--border);
+      transition: border-color var(--transition);
+    }
+
+    .toggle-row:hover { border-color: var(--bg-hover); }
+
+    .toggle-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .toggle-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--bg-tertiary);
+      border-radius: 22px;
+      transition: all var(--transition);
+      border: 1px solid var(--border);
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      left: 2px;
+      bottom: 2px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      transition: all var(--transition);
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(18px);
+      background: #fff;
+    }
+
+    /* ── Input Fields ───────────────────────────────────────────────────── */
+    .field-group {
+      margin-bottom: 8px;
+    }
+
+    .field-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 8px 10px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .field-input:focus {
+      border-color: var(--accent);
+    }
+
+    .field-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .field-select {
+      width: 100%;
+      padding: 8px 10px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+      transition: border-color var(--transition);
+    }
+
+    .field-select:focus {
+      border-color: var(--accent);
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dim);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 11px;
+    }
+
+    /* ── Chip / Tag ──────────────────────────────────────────────────────── */
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .chip-remove {
+      width: 14px;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--bg-hover);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 10px;
+      line-height: 1;
+      border: none;
+      transition: all var(--transition);
+    }
+
+    .chip-remove:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* ── Add domain row ──────────────────────────────────────────────────── */
+    .add-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .add-row .field-input {
+      flex: 1;
+    }
+
+    /* ── Empty state ─────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 16px 8px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* ── Info Box ─────────────────────────────────────────────────────────── */
+    .info-box {
+      padding: 10px 12px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: var(--radius-sm);
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .info-box.warning {
+      background: rgba(245, 158, 11, 0.1);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    /* ── Top blocked domains list ─────────────────────────────────────────── */
+    .domain-list {
+      list-style: none;
+    }
+
+    .domain-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .domain-item:last-child { border-bottom: none; }
+
+    .domain-name {
+      color: var(--text-secondary);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+    }
+
+    .domain-count {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    .footer {
+      padding: 10px 18px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── Proxy status indicator ───────────────────────────────────────────── */
+    .proxy-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    .proxy-status-icon {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .proxy-status-icon.connected {
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    .proxy-status-icon.disconnected {
+      background: var(--text-muted);
+    }
+
+    .proxy-status-text {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <!-- ── Header ──────────────────────────────────────────────────────── -->
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <h1>ShieldBrowse</h1>
+        <span>Ad Blocker &amp; Proxy</span>
+      </div>
+    </div>
+    <div class="header-status" id="globalStatus">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Active</span>
+    </div>
+  </div>
+
+  <!-- ── Stats ───────────────────────────────────────────────────────── -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-value" id="totalBlocked">0</div>
+      <div class="stat-label">Total Blocked</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="sessionBlocked">0</div>
+      <div class="stat-label">This Session</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="domainsBlocked">0</div>
+      <div class="stat-label">Domains</div>
+    </div>
+  </div>
+
+  <!-- ── Tabs ────────────────────────────────────────────────────────── -->
+  <div class="tabs">
+    <div class="tab active" data-tab="shield">Shield</div>
+    <div class="tab" data-tab="proxy">Proxy / VPN</div>
+    <div class="tab" data-tab="sites">Sites</div>
+  </div>
+
+  <!-- ── Tab: Shield ─────────────────────────────────────────────────── -->
+  <div class="tab-content active" id="tab-shield">
+    <div class="section">
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">Ad Blocker</div>
+          <div class="toggle-desc">Block ads, trackers, and annoyances</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="adBlockToggle" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">YouTube Ads</div>
+          <div class="toggle-desc">Skip pre-roll, mid-roll, and overlay ads</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="ytAdToggle" checked disabled />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">Anti-Adblock Bypass</div>
+          <div class="toggle-desc">Remove adblock detection overlays</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="antiAdblockToggle" checked disabled />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">Top Blocked Domains</div>
+        <button class="btn btn-sm btn-secondary" id="resetStatsBtn">Reset</button>
+      </div>
+      <ul class="domain-list" id="topDomains">
+        <li class="empty-state">No blocked domains yet</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── Tab: Proxy ──────────────────────────────────────────────────── -->
+  <div class="tab-content" id="tab-proxy">
+    <div class="section">
+      <div class="proxy-status" id="proxyStatusBar">
+        <div class="proxy-status-icon disconnected" id="proxyStatusIcon"></div>
+        <span class="proxy-status-text" id="proxyStatusText">Proxy Disconnected</span>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-info">
+          <div class="toggle-label">Enable Proxy / VPN</div>
+          <div class="toggle-desc">Route traffic through a proxy server</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="proxyToggle" />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section" id="proxyConfig">
+      <div class="section-title" style="margin-bottom: 10px;">Proxy Configuration</div>
+
+      <div class="info-box">
+        Enter your proxy or VPN server details. Use <strong>Auto</strong> mode to only route blocked sites through the proxy, or <strong>Manual</strong> to route all traffic.
+      </div>
+
+      <div class="field-row" style="margin-bottom: 8px;">
+        <div class="field-group">
+          <label class="field-label">Mode</label>
+          <select class="field-select" id="proxyMode">
+            <option value="manual">Manual (All Traffic)</option>
+            <option value="auto">Auto (Blocked Sites Only)</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Protocol</label>
+          <select class="field-select" id="proxyType">
+            <option value="https">HTTPS</option>
+            <option value="http">HTTP</option>
+            <option value="socks5">SOCKS5</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Host / IP</label>
+          <input type="text" class="field-input" id="proxyHost" placeholder="proxy.example.com" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Port</label>
+          <input type="text" class="field-input" id="proxyPort" placeholder="8080" />
+        </div>
+      </div>
+
+      <div class="field-row" style="margin-top: 4px;">
+        <div class="field-group">
+          <label class="field-label">Username (optional)</label>
+          <input type="text" class="field-input" id="proxyUser" placeholder="username" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password (optional)</label>
+          <input type="password" class="field-input" id="proxyPass" placeholder="password" />
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="saveProxyBtn" style="margin-top: 12px;">
+        Save &amp; Connect
+      </button>
+    </div>
+
+    <div class="section" id="autoProxySection">
+      <div class="section-title" style="margin-bottom: 8px;">Blocked Sites (Auto-Proxy)</div>
+      <div class="info-box warning">
+        Add domains that are blocked in your country. In <strong>Auto</strong> mode, only these sites will be routed through the proxy.
+      </div>
+      <div class="add-row">
+        <input type="text" class="field-input" id="blockedSiteInput" placeholder="example.com" />
+        <button class="btn btn-primary btn-sm" id="addBlockedSiteBtn">Add</button>
+      </div>
+      <div class="chip-list" id="blockedSitesList"></div>
+    </div>
+  </div>
+
+  <!-- ── Tab: Sites ──────────────────────────────────────────────────── -->
+  <div class="tab-content" id="tab-sites">
+    <div class="section">
+      <div class="section-title" style="margin-bottom: 8px;">Whitelisted Sites</div>
+      <div class="info-box">
+        Add domains where you want to <strong>disable</strong> ad blocking. Ads will show normally on these sites.
+      </div>
+      <div class="add-row">
+        <input type="text" class="field-input" id="whitelistInput" placeholder="example.com" />
+        <button class="btn btn-primary btn-sm" id="addWhitelistBtn">Add</button>
+      </div>
+      <div class="chip-list" id="whitelistChips"></div>
+    </div>
+
+    <div class="section" id="detectedSection" style="display: none;">
+      <div class="section-title" style="margin-bottom: 8px;">Detected Blocked Sites</div>
+      <div class="info-box warning">
+        These sites failed to load and may be blocked in your region. Click to add them to auto-proxy routing.
+      </div>
+      <div class="chip-list" id="detectedChips"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" style="margin-bottom: 10px;">Page Tools</div>
+      <div style="display: flex; gap: 6px;">
+        <button class="btn btn-primary btn-sm btn-full" id="readerModeBtn" style="background: #7F77DD; border-color: #7F77DD;">
+          Reader Mode
+        </button>
+        <button class="btn btn-secondary btn-sm btn-full" id="archiveLinksBtn">
+          Archive Links
+        </button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title" style="margin-bottom: 10px;">Current Page</div>
+      <div style="display: flex; gap: 6px;">
+        <button class="btn btn-secondary btn-sm btn-full" id="whitelistCurrentBtn">
+          Whitelist This Site
+        </button>
+        <button class="btn btn-secondary btn-sm btn-full" id="proxyCurrentBtn">
+          Add to Proxy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ──────────────────────────────────────────────────────── -->
+  <div class="footer">
+    ShieldBrowse v2.0 — Open Source (MIT License)<br/>
+    <a href="#" id="openPrivacyPolicy">Privacy Policy</a> · <a href="#" id="openOptions">Settings</a>
+  </div>
+
+  <script src="scripts/popup.js"></script>
+  <script>
+    document.getElementById('openPrivacyPolicy').addEventListener('click', (e) => {
+      e.preventDefault();
+      chrome.tabs.create({ url: chrome.runtime.getURL('privacy-policy.html') });
+    });
+    document.getElementById('openOptions').addEventListener('click', (e) => {
+      e.preventDefault();
+      chrome.runtime.openOptionsPage();
+    });
+  </script>
+</body>
+</html>

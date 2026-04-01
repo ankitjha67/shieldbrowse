@@ -1,0 +1,146 @@
+{
+  "manifest_version": 3,
+  "name": "ShieldBrowse \u2013 Ad Blocker & Proxy",
+  "version": "2.0.0",
+  "description": "Block ads everywhere (including YouTube), bypass geo-restrictions with proxy/VPN, WebRTC protection, anti-fingerprinting, UTM stripping.",
+  "permissions": [
+    "storage",
+    "tabs",
+    "proxy",
+    "webRequest",
+    "webRequestAuthProvider",
+    "declarativeNetRequest",
+    "activeTab",
+    "scripting",
+    "alarms",
+    "contextMenus",
+    "privacy",
+    "cookies"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "scripts/background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "scripts/stealth-loader.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true,
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "scripts/content.js"
+      ],
+      "css": [
+        "styles/content.css"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://m.youtube.com/*",
+        "*://www.youtube.com/*"
+      ],
+      "js": [
+        "scripts/youtube.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "scripts/reader.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "content_scripts_world": {
+    "scripts/inject.js": "MAIN"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "options_page": "options.html",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_0",
+        "enabled": true,
+        "path": "rules/ruleset_0.json"
+      },
+      {
+        "id": "ruleset_antidetect",
+        "enabled": true,
+        "path": "rules/ruleset_antidetect.json"
+      }
+    ]
+  },
+  "commands": {
+    "toggle-ad-block": {
+      "suggested_key": {
+        "default": "Alt+Shift+A"
+      },
+      "description": "Toggle ad blocking on/off"
+    },
+    "toggle-proxy": {
+      "suggested_key": {
+        "default": "Alt+Shift+P"
+      },
+      "description": "Toggle proxy on/off"
+    },
+    "whitelist-current": {
+      "suggested_key": {
+        "default": "Alt+Shift+W"
+      },
+      "description": "Whitelist current site"
+    },
+    "reader-mode": {
+      "suggested_key": {
+        "default": "Alt+Shift+R"
+      },
+      "description": "Activate Reader Mode"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "scripts/inject.js",
+        "scripts/stealth.js",
+        "scripts/reader.js",
+        "scripts/privacy-shield.js",
+        "privacy-policy.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

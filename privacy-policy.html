@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShieldBrowse — Privacy Policy</title>
+  <style>
+    body { font-family: -apple-system, system-ui, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; line-height: 1.7; }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    h2 { font-size: 18px; margin-top: 32px; }
+    .date { font-size: 14px; color: #666; margin-bottom: 32px; }
+    p { margin-bottom: 16px; }
+    ul { margin: 12px 0 16px 24px; }
+    li { margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <h1>ShieldBrowse Privacy Policy</h1>
+  <div class="date">Effective date: April 1, 2026</div>
+
+  <h2>Summary</h2>
+  <p>ShieldBrowse does not collect, store, or transmit any personal data. Everything runs locally in your browser.</p>
+
+  <h2>Data we collect</h2>
+  <p>None. ShieldBrowse has no servers, no accounts, no analytics, no telemetry, and no remote logging. We do not know who you are, what sites you visit, or how you use the extension.</p>
+
+  <h2>Data stored locally</h2>
+  <p>The following data is stored on your device only, using Chrome's <code>chrome.storage.local</code> API. It never leaves your browser:</p>
+  <ul>
+    <li><strong>Settings</strong> — your ad blocking, proxy, and privacy preferences</li>
+    <li><strong>Statistics</strong> — counts of blocked ads/trackers (aggregate numbers, no URLs)</li>
+    <li><strong>Whitelist</strong> — domains you chose to exempt from ad blocking</li>
+    <li><strong>Blocked sites list</strong> — domains you added for proxy routing</li>
+    <li><strong>Custom filter rules</strong> — blocking rules you wrote yourself</li>
+    <li><strong>Cached filter list data</strong> — parsed community filter rules (domain lists only)</li>
+  </ul>
+
+  <h2>Network requests</h2>
+  <p>ShieldBrowse makes the following outbound network requests:</p>
+  <ul>
+    <li><strong>Filter list updates</strong> — The extension periodically fetches community filter lists (EasyList, EasyPrivacy, etc.) from their public URLs. These requests contain no user data — they are equivalent to visiting a public web page. No cookies, authentication, or identifying information is sent.</li>
+    <li><strong>Proxy traffic</strong> — If you configure a proxy server, your browser traffic is routed through that server. ShieldBrowse does not operate, control, or monitor any proxy servers. You are responsible for choosing a trustworthy proxy provider.</li>
+  </ul>
+
+  <h2>Permissions</h2>
+  <p>ShieldBrowse requests browser permissions to function. Each permission serves a specific purpose:</p>
+  <ul>
+    <li><code>storage</code> — Save your settings locally</li>
+    <li><code>tabs</code> — Detect the active tab for whitelist and reader mode</li>
+    <li><code>proxy</code> — Configure proxy routing</li>
+    <li><code>webRequest</code> — Handle proxy authentication</li>
+    <li><code>declarativeNetRequest</code> — Block ad and tracker network requests</li>
+    <li><code>privacy</code> — Configure WebRTC leak protection</li>
+    <li><code>cookies</code> — Cookie auto-clear feature (when enabled by user)</li>
+    <li><code>host_permissions: &lt;all_urls&gt;</code> — Required to block ads on every website</li>
+  </ul>
+
+  <h2>Third-party services</h2>
+  <p>ShieldBrowse does not integrate with any third-party analytics, advertising, or data collection services. We do not participate in any "acceptable ads" program.</p>
+
+  <h2>Children's privacy</h2>
+  <p>ShieldBrowse does not knowingly collect any data from anyone, including children under 13.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this policy changes, the updated version will be published at this URL with a new effective date.</p>
+
+  <h2>Contact</h2>
+  <p>For questions about this privacy policy, open an issue on our GitHub repository.</p>
+</body>
+</html>

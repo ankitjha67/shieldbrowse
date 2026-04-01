@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShieldBrowse — Settings</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0f1117;
+      --bg-secondary: #1a1d27;
+      --bg-tertiary: #242836;
+      --bg-hover: #2d3245;
+      --accent: #10b981;
+      --accent-dim: #059669;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border: #2d3245;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --transition: 200ms ease;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    /* ── Header ──────────────────────────────────────────────────────── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page-header-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--accent) 0%, #34d399 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+
+    .page-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .page-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* ── Sections ────────────────────────────────────────────────────── */
+    .settings-section {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .section-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Toggle Row ──────────────────────────────────────────────────── */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .setting-info h3 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .setting-info p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--bg-primary);
+      border-radius: 24px;
+      transition: all var(--transition);
+      border: 1px solid var(--border);
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 2px;
+      bottom: 2px;
+      background: var(--text-muted);
+      border-radius: 50%;
+      transition: all var(--transition);
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(20px);
+      background: #fff;
+    }
+
+    /* ── Custom Filters ──────────────────────────────────────────────── */
+    .filter-editor {
+      width: 100%;
+      min-height: 200px;
+      padding: 12px 14px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 12px;
+      line-height: 1.8;
+      resize: vertical;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .filter-editor:focus {
+      border-color: var(--accent);
+    }
+
+    .filter-editor::placeholder {
+      color: var(--text-muted);
+    }
+
+    .filter-help {
+      margin-top: 12px;
+      padding: 12px 14px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .filter-help code {
+      background: var(--bg-tertiary);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--accent);
+    }
+
+    /* ── Proxy Presets ───────────────────────────────────────────────── */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .preset-card {
+      padding: 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .preset-card:hover {
+      border-color: var(--accent);
+      background: var(--bg-hover);
+    }
+
+    .preset-card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .preset-name {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .preset-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ── Import/Export ────────────────────────────────────────────────── */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover { background: var(--accent-dim); }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: var(--danger);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    /* ── Toast ────────────────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 300ms ease;
+      z-index: 9999;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ── Stats Grid ──────────────────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 14px 8px;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .stat-card .value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-card .label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 4px;
+    }
+
+    /* ── Filter List Sources ─────────────────────────────────────────── */
+    .filter-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 6px;
+    }
+
+    .filter-list-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-list-name {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .filter-list-count {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .badge-active {
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    .badge-inactive {
+      background: var(--bg-hover);
+      color: var(--text-muted);
+    }
+
+    /* ── Keyboard Shortcuts ───────────────────────────────────────────── */
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 6px;
+    }
+
+    .shortcut-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    kbd {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--text-primary);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- ── Header ──────────────────────────────────────────────────── -->
+    <div class="page-header">
+      <div class="page-header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <h1>ShieldBrowse Settings</h1>
+        <p>Advanced configuration for ad blocking and proxy management</p>
+      </div>
+    </div>
+
+    <!-- ── Stats Overview ─────────────────────────────────────────── -->
+    <div class="settings-section">
+      <div class="section-title">Blocking Statistics</div>
+      <div class="section-desc">Lifetime performance metrics</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="value" id="statTotal">0</div>
+          <div class="label">Ads Blocked</div>
+        </div>
+        <div class="stat-card">
+          <div class="value" id="statSession">0</div>
+          <div class="label">This Session</div>
+        </div>
+        <div class="stat-card">
+          <div class="value" id="statDomains">0</div>
+          <div class="label">Domains</div>
+        </div>
+        <div class="stat-card">
+          <div class="value" id="statRules">100</div>
+          <div class="label">Active Rules</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="btn btn-secondary" id="resetStatsBtn">Reset Statistics</button>
+      </div>
+    </div>
+
+    <!-- ── Ad Blocking Settings ───────────────────────────────────── -->
+    <div class="settings-section">
+      <div class="section-title">Ad Blocking</div>
+      <div class="section-desc">Control what gets blocked across the web</div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h3>Enable Ad Blocking</h3>
+          <p>Master switch for all ad blocking features</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleAdBlock" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h3>Block Tracking Scripts</h3>
+          <p>Block analytics, session recording, and fingerprinting scripts</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleTrackers" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h3>Block Cookie Consent Banners</h3>
+          <p>Auto-dismiss GDPR/cookie consent popups</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleCookieBanners" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h3>Anti-Adblock Bypass</h3>
+          <p>Remove "disable your adblocker" overlays</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleAntiAdblock" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h3>Block Popup Windows</h3>
+          <p>Prevent ad-triggered window.open() popups</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="togglePopups" checked />
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- ── Filter Lists ───────────────────────────────────────────── -->
+    <div class="settings-section">
+      <div class="section-title">Filter Lists</div>
+      <div class="section-desc">Built-in rule sets that power ad blocking</div>
+
+      <div class="filter-list-item">
+        <div class="filter-list-info">
+          <span class="filter-list-name">ShieldBrowse Core Rules</span>
+          <span class="filter-list-count">100 rules — Ad networks, trackers, analytics</span>
+        </div>
+        <span class="badge badge-active">Active</span>
+      </div>
+
+      <div class="filter-list-item">
+        <div class="filter-list-info">
+          <span class="filter-list-name">YouTube Ad Blocker</span>
+          <span class="filter-list-count">25+ selectors — Pre-roll, mid-roll, overlay, promoted</span>
+        </div>
+        <span class="badge badge-active">Active</span>
+      </div>
+
+      <div class="filter-list-item">
+        <div class="filter-list-info">
+          <span class="filter-list-name">Cosmetic Filters</span>
+          <span class="filter-list-count">70+ CSS selectors — DOM element hiding</span>
+        </div>
+        <span class="badge badge-active">Active</span>
+      </div>
+
+      <div class="filter-list-item">
+        <div class="filter-list-info">
+          <span class="filter-list-name">Cookie Banner Blocker</span>
+          <span class="filter-list-count">8 rules — GDPR/consent popup removal</span>
+        </div>
+        <span class="badge badge-active">Active</span>
+      </div>
+    </div>
+
+    <!-- ── Custom Filters ─────────────────────────────────────────── -->
+    <div class="settings-section">
+      <div class="section-title">Custom Filter Rules</div>
+      <div class="section-desc">Add your own domain-based blocking rules (one per line)</div>
+
+      <textarea class="filter-editor" id="customFilters" placeholder="# Add custom domains to block (one per line)
+# Lines starting with # are comments
+# Examples:
+ads.example.com
+tracker.analytics-co.com
+popup.annoyingsite.net
+
+# Block specific paths:
+example.com/ads/*
+example.com/sponsored/*"></textarea>
+
+      <div class="filter-help">
+        <strong>Syntax guide:</strong><br/>
+        <code>domain.com</code> — blocks all requests to this domain<br/>
+        <code>domain.com/path/*</code> — blocks matching URL paths<br/>
+        <code># comment</code> — lines starting with # are ignored<br/>
+        <code>! comment</code> — lines starting with ! are also ignored (EasyList format)
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-primary" id="saveFiltersBtn">Save Custom Filters</button>
+        <button class="btn btn-secondary" id="clearFiltersBtn">Clear All</button>
+      </div>
+    </div>
+
+    <!-- ── Proxy Presets ──────────────────────────────────────────── -->
+    <div class="settings-section">
+      <div class="section-title">Proxy Presets</div>
+      <div class="section-desc">Quick-apply common proxy configurations for popular VPN services</div>
+
+      <div class="preset-grid">
+        <div class="preset-card" data-preset="nordvpn">
+          <div class="preset-name">NordVPN (SOCKS5)</div>
+          <div class="preset-desc">Host: your-server.nordvpn.com | Port: 1080</div>
+        </div>
+        <div class="preset-card" data-preset="pia">
+          <div class="preset-name">Private Internet Access</div>
+          <div class="preset-desc">Host: proxy-nl.privateinternetaccess.com | Port: 1080</div>
+        </div>
+        <div class="preset-card" data-preset="surfshark">
+          <div class="preset-name">Surfshark (HTTP)</div>
+          <div class="preset-desc">Host: your-server.surfshark.com | Port: 1080</div>
+        </div>
+        <div class="preset-card" data-preset="windscribe">
+          <div class="preset-name">Windscribe (SOCKS5)</div>
+          <div class="preset-desc">Host: your-server.windscribe.com | Port: 1080</div>
+        </div>
+        <div class="preset-card" data-preset="custom">
+          <div class="preset-name">Custom Proxy</div>
+          <div class="preset-desc">Configure your own proxy server details</div>
+        </div>
+      </div>
+
+      <div class="filter-help" style="margin-top: 12px;">
+        <strong>Note:</strong> These are template configurations. You'll need to enter your actual VPN credentials in the popup's Proxy tab. Check your VPN provider's docs for their proxy server addresses.
+      </div>
+    </div>
+
+    <!-- ── Import / Export ────────────────────────────────────────── -->
+    <div class="settings-section">
+      <div class="section-title">Import / Export Settings</div>
+      <div class="section-desc">Backup or restore all ShieldBrowse settings including custom filters, whitelist, and proxy config</div>
+
+      <div class="action-row">
+        <button class="btn btn-primary" id="exportBtn">Export Settings (JSON)</button>
+        <button class="btn btn-secondary" id="importBtn">Import Settings</button>
+        <input type="file" id="importFile" accept=".json" style="display: none;" />
+      </div>
+    </div>
+
+    <!-- ── Keyboard Shortcuts ─────────────────────────────────────── -->
+    <div class="settings-section">
+      <div class="section-title">Keyboard Shortcuts</div>
+      <div class="section-desc">Configurable via chrome://extensions/shortcuts</div>
+
+      <div class="shortcut-row">
+        <span class="shortcut-label">Toggle ad blocking</span>
+        <span><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd></span>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-label">Toggle proxy</span>
+        <span><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></span>
+      </div>
+      <div class="shortcut-row">
+        <span class="shortcut-label">Whitelist current site</span>
+        <span><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>W</kbd></span>
+      </div>
+    </div>
+
+    <!-- ── Danger Zone ────────────────────────────────────────────── -->
+    <div class="settings-section" style="border-color: rgba(239, 68, 68, 0.2);">
+      <div class="section-title" style="color: var(--danger);">Danger Zone</div>
+      <div class="section-desc">Irreversible actions — proceed with caution</div>
+
+      <div class="action-row">
+        <button class="btn btn-danger" id="resetAllBtn">Reset All Settings to Default</button>
+      </div>
+    </div>
+
+    <!-- Credits & Legal -->
+    <div class="settings-section">
+      <div class="section-title">Filter List Credits</div>
+      <div class="section-desc">ShieldBrowse uses community-maintained filter lists under open licenses</div>
+      <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.8;">
+        <div style="padding: 8px 0; border-bottom: 1px solid var(--border);">EasyList / EasyPrivacy — GPL v3 — <a href="https://easylist.to" style="color: var(--accent);">easylist.to</a></div>
+        <div style="padding: 8px 0; border-bottom: 1px solid var(--border);">Peter Lowe's Ad Servers — McRae GPL — <a href="https://pgl.yoyo.org/adservers/" style="color: var(--accent);">pgl.yoyo.org</a></div>
+        <div style="padding: 8px 0; border-bottom: 1px solid var(--border);">uBlock Origin Filters — GPL v3 — <a href="https://github.com/uBlockOrigin/uAssets" style="color: var(--accent);">github.com/uBlockOrigin</a></div>
+        <div style="padding: 8px 0; border-bottom: 1px solid var(--border);">AdGuard Filters — GPL v3 — <a href="https://github.com/AdguardTeam/AdguardFilters" style="color: var(--accent);">github.com/AdguardTeam</a></div>
+        <div style="padding: 8px 0; border-bottom: 1px solid var(--border);">Fanboy's Lists — <a href="https://fanboy.co.nz" style="color: var(--accent);">fanboy.co.nz</a></div>
+        <div style="padding: 8px 0;">URLhaus Malware Filter — <a href="https://gitlab.com/malware-filter/urlhaus-filter" style="color: var(--accent);">gitlab.com/malware-filter</a></div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-title">Legal</div>
+      <div class="section-desc">Important notices</div>
+      <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.8; padding: 12px 14px; background: var(--bg-tertiary); border-radius: var(--radius-sm);">
+        <p style="margin-bottom: 10px;"><strong style="color: var(--text-primary);">VPN/Proxy Disclaimer:</strong> ShieldBrowse provides proxy routing configuration. It does not operate or provide proxy/VPN servers. Users are responsible for choosing a trustworthy proxy provider and complying with local laws regarding VPN/proxy usage in their jurisdiction.</p>
+        <p style="margin-bottom: 10px;"><strong style="color: var(--text-primary);">Ad Blocking:</strong> Ad blocking is legal in all major jurisdictions including the US, EU, UK, Canada, Australia, and India. ShieldBrowse does not modify website content on their servers — it controls how your browser renders content it has already received.</p>
+        <p><strong style="color: var(--text-primary);">Open Source:</strong> ShieldBrowse is released under the MIT License. Source code is available for audit.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── Helpers ──────────────────────────────────────────────────────
+    const $ = (sel) => document.querySelector(sel);
+    const toast = (msg) => {
+      const el = $('#toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2500);
+    };
+
+    function sendMessage(msg) {
+      return new Promise((resolve) => chrome.runtime.sendMessage(msg, resolve));
+    }
+
+    // ── Load Settings ───────────────────────────────────────────────
+    async function init() {
+      const response = await sendMessage({ type: 'GET_SETTINGS' });
+      if (!response?.settings) return;
+      const s = response.settings;
+
+      $('#toggleAdBlock').checked = s.adBlockEnabled;
+      $('#customFilters').value = (s.customFilterRules || []).join('\n');
+
+      // Stats
+      $('#statTotal').textContent = formatNum(s.stats?.totalBlocked || 0);
+      $('#statSession').textContent = formatNum(s.stats?.sessionBlocked || 0);
+      $('#statDomains').textContent = Object.keys(s.stats?.sitesBlocked || {}).length;
+    }
+
+    function formatNum(n) {
+      if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+      if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+      return String(n);
+    }
+
+    // ── Events ──────────────────────────────────────────────────────
+    $('#toggleAdBlock').addEventListener('change', async function () {
+      await sendMessage({ type: 'UPDATE_SETTINGS', payload: { adBlockEnabled: this.checked } });
+      toast(this.checked ? 'Ad blocking enabled' : 'Ad blocking disabled');
+    });
+
+    $('#saveFiltersBtn').addEventListener('click', async () => {
+      const raw = $('#customFilters').value;
+      const rules = raw.split('\n')
+        .map(l => l.trim())
+        .filter(l => l && !l.startsWith('#') && !l.startsWith('!'));
+      await sendMessage({ type: 'UPDATE_SETTINGS', payload: { customFilterRules: rules } });
+      toast(`Saved ${rules.length} custom filter rules`);
+    });
+
+    $('#clearFiltersBtn').addEventListener('click', () => {
+      $('#customFilters').value = '';
+      toast('Custom filters cleared (save to apply)');
+    });
+
+    $('#resetStatsBtn').addEventListener('click', async () => {
+      await sendMessage({ type: 'RESET_STATS' });
+      $('#statTotal').textContent = '0';
+      $('#statSession').textContent = '0';
+      $('#statDomains').textContent = '0';
+      toast('Statistics reset');
+    });
+
+    // Export
+    $('#exportBtn').addEventListener('click', async () => {
+      const response = await sendMessage({ type: 'GET_SETTINGS' });
+      if (!response?.settings) return;
+      const blob = new Blob([JSON.stringify(response.settings, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `shieldbrowse-settings-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('Settings exported');
+    });
+
+    // Import
+    $('#importBtn').addEventListener('click', () => $('#importFile').click());
+    $('#importFile').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const settings = JSON.parse(text);
+        await sendMessage({ type: 'UPDATE_SETTINGS', payload: settings });
+        toast('Settings imported successfully');
+        setTimeout(() => location.reload(), 500);
+      } catch (err) {
+        toast('Invalid settings file');
+      }
+    });
+
+    // Reset All
+    $('#resetAllBtn').addEventListener('click', async () => {
+      if (!confirm('This will erase all settings, whitelist, proxy config, and statistics. Are you sure?')) return;
+      await chrome.storage.local.clear();
+      toast('All settings reset to default');
+      setTimeout(() => location.reload(), 500);
+    });
+
+    // Proxy presets
+    document.querySelectorAll('.preset-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.preset-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        toast(`${card.querySelector('.preset-name').textContent} template selected — configure credentials in the popup`);
+      });
+    });
+
+    init();
+  </script>
+</body>
+</html>
