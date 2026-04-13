@@ -11,7 +11,7 @@
 ## Install
 
 - **Chrome, Brave, Vivaldi, Arc**: [Chrome Web Store](https://chromewebstore.google.com/detail/shieldbrowse-ad-blocker-p/fjpiikehggmlpkccnhjjmejeiefdcnhj)
-- **Microsoft Edge**: [Edge Add-ons](https://microsoftedge.microsoft.com/addons)
+- **Microsoft Edge**: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/shieldbrowse-ad-blocker/iagffhdkphbopidebnjmfkipgogbljpm?hl=en-GB)
 - **Firefox**: [Firefox Add-ons](https://addons.mozilla.org/addon/shieldbrowse-ad-blocker-proxy/)
 
 ## Features
